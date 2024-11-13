@@ -41,8 +41,10 @@ To explore these questions, I used: - **Sentinel-2 satellite data** to analyze v
 
 Two TIFF files covered the geographical area of interest. These were imported as shown below:
 
-::: {layout-ncol="2"}
-![NDVI Image 1](data/ndvi-raw1.JPG) ![NDVI Image 2](data/ndvi-raw2.JPG)
+::: {#fig-ndvi layout-ncol="2" .column-body-outset-right}
+![NDVI Image 1](data/ndvi-raw1.JPG) 
+
+![NDVI Image 2](data/ndvi-raw2.JPG)
 :::
 
 After import, the two images were merged to form a single comprehensive NDVI image of the area.
@@ -53,7 +55,8 @@ After import, the two images were merged to form a single comprehensive NDVI ima
 
 To calculate accurate vegetation density statistics, I created a mask to exclude water data:
 
-![Masked NDVI](data/ndvi-masked.JPG){width="70%"}
+
+![Masked NDVI](data/ndvi-masked.JPG){width="70%"}{.lightbox}
 
 #### 3. Calculating and Visualizing NDVI
 

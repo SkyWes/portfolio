@@ -1,6 +1,6 @@
 ---
 title: "Skylar Carroll"
-image: profile.jpg
+image: profile-ai.png
 about:
   template: trestles
   image-shape: round

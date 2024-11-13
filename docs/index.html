@@ -62,9 +62,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -181,87 +181,99 @@ window.Quarto = {
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="powerbi" data-listing-date-sort="1731312000000" data-listing-file-modified-sort="1731369793503" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="78">
-<div class="thumbnail">
-<p><a href="./posts/defi-llama/index.html" class="no-external"></a></p><a href="./posts/defi-llama/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/defi-llama/thumbnail.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/defi-llama/index.html" class="no-external"></a></p>
+<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
+        </option>
+     </select>
+  </div>
 </div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/defi-llama/index.html" class="no-external">Defi Research Dashboard</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/defi-llama/index.html" class="no-external">A tool for researching defi projects using the Defi Llama REST API.</a>
-</div>
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="powerbi" data-listing-date-sort="1731312000000" data-listing-file-modified-sort="1731369793503" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="78">
+<a href="./posts/defi-llama/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./posts/defi-llama/thumbnail.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Defi Research Dashboard
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('powerbi'); return false;">
 powerbi
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/defi-llama/index.html" class="no-external">Defi Llama is a defi research and tracking website with a public REST API. I designed a simple interface to quickly find new or fast moving defi projects, filtered by type…</a>
+<div class="card-text listing-description">
+Defi Llama is a defi research and tracking website with a public REST API. I designed a simple interface to quickly find new or fast moving defi projects, filtered by type…
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/defi-llama/index.html" class="no-external">
-<div class="listing-date">
-Nov 11, 2024
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Skylar Carroll
 </div>
+<div class="listing-date">
+Nov 11, 2024
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="R" data-listing-date-sort="1730012400000" data-listing-file-modified-sort="1731356030345" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4665">
-<div class="thumbnail">
-<p><a href="./posts/ev-sales/index.html" class="no-external"></a></p><a href="./posts/ev-sales/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/ev-sales/thumbnail.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/ev-sales/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ev-sales/index.html" class="no-external">Canada’s Path to an EV Future</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ev-sales/index.html" class="no-external">Where Canada stands in the global shift to zero emission vehicles</a>
-</div>
+<div class="g-col-1" data-index="1" data-categories="R" data-listing-date-sort="1730012400000" data-listing-file-modified-sort="1731356030345" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4665">
+<a href="./posts/ev-sales/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./posts/ev-sales/thumbnail.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Canada’s Path to an EV Future
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
 R
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/ev-sales/index.html" class="no-external">As society continues to rapidly shift to cleaner transportation, how near are we to an EV-dominant future and how fast is this transformation taking place both in Canada…</a>
+<div class="card-text listing-description">
+As society continues to rapidly shift to cleaner transportation, how near are we to an EV-dominant future and how fast is this transformation taking place both in Canada…
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/ev-sales/index.html" class="no-external">
-<div class="listing-date">
-Oct 27, 2024
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Skylar Carroll
 </div>
+<div class="listing-date">
+Oct 27, 2024
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="python,powerbi" data-listing-date-sort="1713769200000" data-listing-file-modified-sort="1731376200708" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="358">
-<div class="thumbnail">
-<p><a href="./posts/ndvi-vs-income/index.html" class="no-external"></a></p><a href="./posts/ndvi-vs-income/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/ndvi-vs-income/thumbnail.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/ndvi-vs-income/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ndvi-vs-income/index.html" class="no-external">Vegitation Density in the Greater Vancouver Area</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ndvi-vs-income/index.html" class="no-external">What is the Relationship Between Income and Vegetation Density in the Greater Vancouver Area?</a>
-</div>
+<div class="g-col-1" data-index="2" data-categories="python,powerbi" data-listing-date-sort="1713769200000" data-listing-file-modified-sort="1731531779658" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="360">
+<a href="./posts/ndvi-vs-income/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./posts/ndvi-vs-income/thumbnail.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Vegitation Density in the Greater Vancouver Area
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('python'); return false;">
 python
@@ -270,20 +282,20 @@ python
 powerbi
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/ndvi-vs-income/index.html" class="no-external">The urban heat island (UHI) effect results in the warming of cities due to reduced vegetation, with neighborhoods lacking green space being most vulnerable to this effect.…</a>
+<div class="card-text listing-description">
+The urban heat island (UHI) effect results in the warming of cities due to reduced vegetation, with neighborhoods lacking green space being most vulnerable to this effect.…
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/ndvi-vs-income/index.html" class="no-external">
-<div class="listing-date">
-Apr 22, 2024
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Skylar Carroll
 </div>
-</a>
+<div class="listing-date">
+Apr 22, 2024
 </div>
+</div>
+</div>
+</div>
+</a>
 </div>
 </div>
 <div class="listing-no-matching d-none">
