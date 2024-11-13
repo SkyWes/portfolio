@@ -8,7 +8,7 @@ website:
     left: 
       - text: Skylar Carroll
         href: about.qmd
-      - text: Home
+      - text: Projects
         href: index.qmd
       - text: About
         href: about.qmd
@@ -23,9 +23,8 @@ website:
   page-footer: 
     left: "Copyright 2024, Skylar Carroll" 
     right: 
-      - icon: house
-        href: index.qmd
-        text: Home
+      - href: index.qmd
+        text: Projects
       - icon: linkedin
         href: https://www.linkedin.com/in/skylar-carroll/
       - icon: github
