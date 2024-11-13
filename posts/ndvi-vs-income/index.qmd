@@ -1,0 +1,85 @@
+---
+title: "Vegitation Density in the Greater Vancouver Area"
+subtitle: "What is the Relationship Between Income and Vegetation Density in the Greater Vancouver Area?"
+author: Skylar Carroll
+format: 
+  html:
+    embed-resources: true
+    df-print: paged
+date: "Apr 22, 2024"
+toc: true
+toc-location: left
+toc-depth: 4
+title-block-style: default
+title-block-banner: true
+image: "thumbnail.jpg"
+categories: 
+  - python
+  - powerbi
+---
+
+##### Download the [python notebook](https://github.com/SkyWes/ndvi-and-income)
+
+### Key Questions
+
+The urban heat island (UHI) effect results in the warming of cities due to reduced vegetation, with neighborhoods lacking green space being most vulnerable to this effect. This analysis investigates:
+
+1.  **Which neighborhoods in Vancouver are the greenest?**
+2.  **What is the relationship between income and vegetation density in the Greater Vancouver Area?**
+
+------------------------------------------------------------------------
+
+### Data Sources and Tools
+
+To explore these questions, I used: - **Sentinel-2 satellite data** to analyze vegetation density. - **Statistics Canada census data** to examine income distribution. - **Python** for data processing and transformation. - **Power BI** for creating an interactive data visualization dashboard.
+
+------------------------------------------------------------------------
+
+### Data Transformation Steps
+
+#### 1. Importing and Merging Satellite Data
+
+Two TIFF files covered the geographical area of interest. These were imported as shown below:
+
+::: {layout-ncol="2"}
+![NDVI Image 1](data/ndvi-raw1.JPG) ![NDVI Image 2](data/ndvi-raw2.JPG)
+:::
+
+After import, the two images were merged to form a single comprehensive NDVI image of the area.
+
+![Merged NDVI](data/ndvi-merged.JPG)
+
+#### 2. Masking Water Areas
+
+To calculate accurate vegetation density statistics, I created a mask to exclude water data:
+
+![Masked NDVI](data/ndvi-masked.JPG){width="70%"}
+
+#### 3. Calculating and Visualizing NDVI
+
+The **Normalized Difference Vegetation Index (NDVI)**, a measure of vegetation health, was computed for the area. A histogram was plotted to visualize the distribution of NDVI values:
+
+![NDVI Distribution](data/ndvi-distribution.JPG){width="70%"}
+
+#### 4. Income Data Transformation
+
+After importing and cleaning income data from Statistics Canada, I visualized the distribution of average income for the Greater Vancouver Area:
+
+![Average Income Distribution](data/avg-income.JPG){width="70%"}
+
+#### 5. Building the Interactive Dashboard
+
+The cleaned datasets were imported into Power BI, where I built a semantic model and designed an interactive dashboard. Explore the dashboard here:
+
+[![Click img to use Dashboard](data/dashboard.JPG)](https://community.fabric.microsoft.com/t5/Data-Stories-Gallery/Cooling-Our-Cities-Should-Green-Spaces-Be-A-Luxury/m-p/3860812)
+
+------------------------------------------------------------------------
+
+### Key Findings
+
+-   **Income and Vegetation Density**: There is a weak positive correlation between income and vegetation density, likely influenced by higher-income individuals having the flexibility to acquire properties with more green space.
+-   **Notable Neighborhoods**:
+    -   **Olympic Village**: A high-income area with lower NDVI values, indicating less greenery.
+    -   **University of British Columbia (UBC)**: Despite its relatively lower income (likely due to a large student population), UBC has high NDVI values, showcasing significant greenery.
+
+These findings highlight potential areas for targeted urban greening initiatives to mitigate the urban heat island effect and promote environmental equity.

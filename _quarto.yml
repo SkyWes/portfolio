@@ -1,0 +1,42 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  search: false
+  navbar:
+    left: 
+      - text: Skylar Carroll
+        href: about.qmd
+      - text: Home
+        href: index.qmd
+      - text: About
+        href: about.qmd
+    tools:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/skylar-carroll/
+      - icon: github
+        href: https://github.com/SkyWes?tab=repositories
+      - icon: envelope
+        href: mailto:86sky.c@gmail.com
+        
+  page-footer: 
+    left: "Copyright 2024, Skylar Carroll" 
+    right: 
+      - icon: house
+        href: index.qmd
+        text: Home
+      - icon: linkedin
+        href: https://www.linkedin.com/in/skylar-carroll/
+      - icon: github
+        href: https://github.com/SkyWes?tab=repositories
+      - icon: envelope
+        href: mailto:86sky.c@gmail.com
+
+format:
+  html:
+    theme: flatly
+    css: styles.css
+
+editor: visual
+

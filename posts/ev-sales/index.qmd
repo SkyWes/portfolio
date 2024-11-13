@@ -1,0 +1,895 @@
+---
+title: "Canada's Path to an EV Future"
+subtitle: "Where Canada stands in the global shift to zero emission vehicles"
+author: Skylar Carroll
+format: 
+  html:
+    embed-resources: true
+    df-print: paged
+date: "Oct 27, 2024"
+table-of-contents: true
+toc-location: left
+title-block-style: default
+title-block-banner: true
+image: "thumbnail.jpg"
+categories:
+  - R
+---
+
+------------------------------------------------------------------------
+
+###### For a high-level presentation of the findings, [click here.](https://www.linkedin.com/feed/update/urn:li:activity:7259295545637101568/)
+
+As society continues to rapidly shift to cleaner transportation, how near are we to an EV-dominant future and how fast is this transformation taking place both in Canada, and globally? This analysis highlights how many of Canada's new vehicle registrations are already electric compared to global leaders, and attempts to measure the speed of this transition.
+
+With data from [Stats Canada](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2010002401) and [International Energy Agency](https://www.iea.org/reports/global-ev-outlook-2023), we’ll answer these questions to understand when EVs might dominate Canadian roads.
+
+## Setting up the R environment
+
+The following libraries will allow us to import, tidy, and visualize the data.
+
+```{r}
+#| output: false
+
+# to style code according to the tidyverse style guide
+# install.packages("styler")
+
+library(knitr) # for rendering this document
+opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
+options(width = 100, dplyr.width = 100)
+
+library(tidyverse) # for cleaning the data
+library(lubridate) # date handling
+library(forcats) # factor manipulation
+library(janitor) # tidying variables
+library(kableExtra) # creating data tables
+```
+
+## Importing and validating the data
+
+There are two Statistics Canada datasets for new motor vehicle registrations (NMVR) with breakdowns by fuel type, geography, and vehicle type. One published in 2021 which is yearly data, and the most recent quarterly data up to and including Q2 2024. The global data is a single csv with car sales with electric and non-electric values.
+
+```{r}
+#| output: false
+
+# output hidden
+
+# reading in the Stats Canada datasets.
+
+# https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2010002101
+# citation: Statistics Canada. Table 20-10-0021-01  New motor vehicle registrations, inactive
+statscan2021 <- read_csv("data/statscan_2021.csv")
+
+# https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2010002401
+# citation: Statistics Canada. Table 20-10-0024-01  New motor vehicle registrations, quarterly
+statscan2024 <- read_csv("data/statscan_2024.csv")
+
+# now for the global data
+# https://ourworldindata.org/electric-car-sales
+# citation: International Energy Agency. Global EV Outlook 2024. – processed by Our World in Data
+statsglobal_csv <- read_csv("data/car-sales.csv")
+```
+
+\
+This code is inspecting the structure of the data to see how we should proceed.
+
+```{r}
+#| output: false
+
+# output hidden
+
+# check structure
+str(statscan2021)
+head(statscan2021)
+
+str(statscan2024)
+head(statscan2024)
+
+str(statsglobal_csv)
+summary(statsglobal_csv)
+
+statsglobal_csv |>
+  select(Entity) |>
+  distinct() # Important: this reveals a 'World' geography with totals.
+```
+
+\
+Both Stats Canada datasets have the same structure except for granularity and the ref_date column. Before joining the data, the date columns must be made compatible.
+
+The summary function can be used to validate the date and value ranges, to check for NA or missing data, and for comparing the categories.
+
+```{r}
+# The 2021 data only has years of class dbl while the 2024 data has yyyy-mm as class chr
+# validate date range and distinct categories.
+statscan2021 |>
+  # we are only interested in these variables
+  select(REF_DATE, GEO, `Fuel type`, `Vehicle type`) |>
+  mutate(
+    geo = as.factor(GEO), # create factors for the summary function
+    fuel_type = as.factor(`Fuel type`),
+    vehicle_type = as.factor(`Vehicle type`),
+    .keep = "unused" # don't include referenced columns
+  ) |>
+  summary()
+
+statscan2024 |>
+  select(REF_DATE, GEO, `Fuel type`, `Vehicle type`) |>
+  mutate(
+    ref_date = ym(REF_DATE), # convert to date for the summary function
+    geo = as.factor(GEO),
+    fuel_type = as.factor(`Fuel type`),
+    vehicle_type = as.factor(`Vehicle type`),
+    .keep = "unused"
+  ) |>
+  summary()
+```
+
+\
+We can see from the summaries that the vehicle types and fuel types of both datasets are equal but not all of the distinct geographies are listed. Let's check and compare the distinct geographies to make sure joining the data goes smoothly.
+
+```{r}
+# checking all of the distinct geographies in the dataset
+stats1 <- statscan2021 |>
+  select(GEO) |>
+  distinct()
+
+stats2 <- statscan2024 |>
+  select(GEO) |>
+  distinct()
+
+all.equal(stats1, stats2)
+```
+
+```{r, echo=FALSE}
+#| output: false
+# We no longer need the variables for comparing.
+rm(stats1, stats2)
+```
+
+## Tidying the data
+
+Before joining the data ensure all variables are shared by creating a 'year', 'quarter', and 'ref_date' variable where needed.
+
+```{r}
+statscan2021_clean <- statscan2021 |>
+  clean_names("snake") |>
+  
+  # Only keep needed variables
+  select(ref_date, geo, fuel_type, vehicle_type, value) |>
+  
+  # create a separate year column
+  rename(year = ref_date) |>
+  
+  # and ref_date and quarter columns to properly union the two datasets
+  # Note: any quarterly analysis may not work as expected without first
+  # filtering out the NAs removing years without quarterly data
+  mutate(
+    ref_date = NA,
+    quarter = NA
+  )
+
+
+statscan2024_clean <- statscan2024 |>
+  clean_names("snake") |>
+  
+  # Only keep needed variables
+  select(ref_date, geo, fuel_type, vehicle_type, value) |>
+  
+  # create year, quarter columns and mutate ref_date to class 'date'.
+  mutate(
+    quarter = quarter(ym(ref_date)),
+    ref_date = ym(ref_date),
+    year = year(ref_date)
+  )
+```
+
+\
+In the meta-data, it states that, "Data for Newfoundland and Labrador, Nova Scotia and Alberta are currently not available..." This code checks to ensure these provinces don't have any data.
+
+```{r}
+#| layout-nrow: 2
+# create object with NA geographies
+
+na_geo <- c("Newfoundland and Labrador", "Alberta", "Nova Scotia")
+
+# check if there are only NAs for those provinces before dropping rows.
+statscan2021_clean |>
+  filter(geo %in% na_geo, is.na(value) == FALSE)
+
+statscan2024_clean |>
+  filter(geo %in% na_geo, is.na(value) == FALSE)
+```
+
+\
+Zero rows output confirms we can safely remove observations for those provinces.
+
+```{r}
+# drop the observations with provinces in 'na_geo'
+statscan2021_clean <- statscan2021_clean |>
+  filter(!(geo %in% na_geo))
+
+statscan2024_clean <- statscan2024_clean |>
+  filter(!(geo %in% na_geo))
+```
+
+\
+To join the data, filter out the overlapping years in favour of the higher granularity in the quarterly data set, then the observations can be stacked with a union.
+
+```{r}
+# only include years prior to 2017
+statscan2021_clean <- statscan2021_clean |>
+  filter(year < "2017")
+
+# union the datasets and check the result
+(statscan_nmvr <- statscan2024_clean |>
+  union(statscan2021_clean) |>
+    
+  # we won't need vehicle types
+  filter(vehicle_type == "Total, vehicle type") |>
+  select(-vehicle_type) |>
+    
+  # adding in superscript for a table footnote
+  mutate(
+    fuel_type = case_when(str_detect(fuel_type, "Other fuel types") ~ "Other fuel types\u00B2",
+      .default = fuel_type
+    ),
+
+    # create new column to group fuel types into either EV or non-EV
+    ev_fuel = case_when(fuel_type %in% c("Battery electric", "Plug-in hybrid electric") ~ "EV",
+      !(fuel_type %in% c("All fuel types", "Battery electric", "Plug-in hybrid electric")) ~ "Non-EV",
+      .default = fuel_type
+    )
+  )
+)
+```
+
+## Preparing the data
+
+**1. Table data frame**
+
+Now the data is ready to be prepared for visualizing by creating some data frames starting with a table.
+
+```{r}
+#| code-fold: true
+####################################################
+#########  Kable Table ############################
+
+# for easily referencing BC
+bc_geo <- "British Columbia and the Territories"
+
+# preparing data for a table
+statscan_nmvr_kable <- statscan_nmvr |>
+  
+  # keep only Canada and BC. Take a snapshot
+  # of the past five and a half years (2024 is up to Q2) only.
+  filter(
+    geo %in% c("Canada", bc_geo),
+    year >= 2019
+  ) |>
+  group_by(geo, fuel_type, year) |>
+  summarise(units = sum(value)) |>
+  
+  # pivoting to a wide format for the table
+  pivot_wider(names_from = year, values_from = units) |>
+  arrange(desc(geo), desc(`2023`)) |>
+  ungroup()
+
+# custom column headers for the table
+my_col_names <- c(" ", " ", " ", "Units", " ", " ", " ")
+new_headers <- c("Fuel Type" = 1, "2019" = 1, "2020" = 1, "2021" = 1, "2022" = 1, "2023" = 1, "2024" = 1)
+```
+
+**2. Column chart data frame**
+
+The following code is for a column chart with factors and labels for highlighting specific data.
+
+```{r}
+#| code-fold: true
+####################################################
+#########  Column chart ###########################
+
+# data frame for column chart
+nmvr_province <- statscan_nmvr |>
+  filter(
+    ev_fuel != "All fuel types", # Important: this is a totals row
+    geo != "Canada",
+    year == 2023
+  ) |>
+  group_by(geo, ev_fuel) |>
+  summarise(nmvr = sum(value)) |>
+  mutate(share = nmvr / sum(nmvr) * 100)
+
+# reordering factor levels
+nmvr_province_lvls <- nmvr_province |>
+  filter(ev_fuel == "EV") |>
+  arrange(share) |>
+  pull(geo)
+
+nmvr_province <- mutate(nmvr_province,
+  geo = factor(geo, levels = nmvr_province_lvls)
+)
+
+# creating df for highlighting and labeling in plots
+nmvr_bc <- nmvr_province |>
+  filter(geo == bc_geo) |>
+  mutate(label = ifelse(ev_fuel == "EV", round(share / 100, 2), NA))
+
+# bc labels
+nmvr_bc_ev <- nmvr_bc |>
+  filter(ev_fuel == "EV") |>
+  pull(label)
+
+# ev levels
+nmvr_ev_lvls <- nmvr_province |>
+  filter(ev_fuel == "EV") |>
+  arrange(nmvr) |>
+  pull(geo)
+
+# ev labels
+nmvr_ev_labs <- nmvr_province |>
+  filter(ev_fuel == "EV") |>
+  arrange(desc(nmvr)) |>
+  head(n = 3)
+```
+
+**3. Timeseries data frames**
+
+Data frames for quarterly and yearly plots.
+
+```{r}
+#| code-fold: true
+####################################################
+#########  Timeseries #############################
+
+# function for common share transformation
+share_calc <- function(df, g, scale) {
+  return(df |>
+    filter(geo == g) |>
+    group_by({{ scale }}, ev_fuel) |>
+    summarise(nmvr = sum(value)) |>
+    mutate(share = nmvr / sum(nmvr)) |>
+    filter(ev_fuel == "EV"))
+}
+
+# data frame for quarterly timeseries
+nmvr_quarterly_share <- statscan_nmvr |>
+  filter(
+    fuel_type != "All fuel types",
+    # only the quarterly data
+    !(is.na(quarter))
+  )
+
+# one for BC
+nmvr_quarterly_share_bc <- share_calc(nmvr_quarterly_share, bc_geo, ref_date)
+
+# one for Canada
+nmvr_quarterly_share_can <- share_calc(nmvr_quarterly_share, "Canada", ref_date)
+
+# finding the year over year rate of EV share growth
+nmvr_share_rate <- share_calc(
+  filter(
+    statscan_nmvr,
+    fuel_type != "All fuel types",
+    year != 2024
+  ),
+  "Canada", year
+) |>
+  arrange(year) |>
+  ungroup() |>
+  mutate(share_growth = (share - lag(share)) / lag(share) * 100)
+```
+
+**4. Global data**
+
+The following code prepares data frames for plotting and statistics of the global data.
+
+```{r}
+#| code-fold: true
+####################################################
+#########  Global Data ############################
+
+# tidying global data
+statsglobal_clean <- statsglobal_csv |>
+  select(-Code) |>
+  clean_names("snake") |>
+  mutate(
+    electric_cars = electric_cars_sold,
+    non_electric_cars = round(non_electric_car_sales),
+    ev_yearly_share = electric_cars / (electric_cars + non_electric_cars),
+  ) |>
+  pivot_longer(cols = ends_with("cars"), names_to = "type", values_to = "sales")
+
+# ordering global data for factor levels
+top_ev_share_global_levels <- statsglobal_clean |>
+  filter(year == max(year)) |>
+  summarize(.by = c(entity, year), ev_share = max(ev_yearly_share)) |>
+  arrange(desc(ev_share)) |>
+  select(entity) |>
+  pull(entity)
+
+
+# Creating data frame and factor levels for global share plot
+ev_share_global <- statsglobal_clean |>
+  mutate(entity = factor(entity, levels = top_ev_share_global_levels)) |>
+  filter(as.integer(entity) < 6 | entity == "Canada") |>
+  group_by(entity, year) |>
+  
+  # we take the max and not the sum of ev_yearly_share here because the share
+  # was calculated before pivoted, creating repeated values for each 'type'
+  summarise(ev_share = max(ev_yearly_share))
+
+# finding the max value for labelling
+max_share <- ev_share_global |>
+  group_by(entity) |>
+  summarise(share = max(ev_share))
+
+# creating new column for highlighting Canada
+ev_share_global_fill <- ev_share_global |>
+  mutate(is_canada = as.character(entity == "Canada"))
+
+####################################################
+# creating data frame for share growth stats
+global_share_growth <- statsglobal_clean |>
+  filter(
+    entity == "World",
+    type == "electric_cars"
+  ) |>
+  arrange(year) |>
+  mutate(share_growth = (ev_yearly_share - lag(ev_yearly_share)) / lag(ev_yearly_share) * 100)
+```
+
+**5. Theme and palette**
+
+To maintain a consistent style, we can prepare a theme to style the plots and define an accessible colour palette.
+
+```{r}
+#| output: false
+#| code-fold: true
+
+# output: false
+# create a ggplot custom theme
+
+theme <- theme_minimal() +
+  theme(
+    axis.title.x = element_text(margin = margin(t = 3, b = 3)),
+    axis.title.y = element_blank(),
+    strip.background = element_blank(),
+    axis.line.x = element_line(color = "gray"),
+    axis.line.y = element_line(color = "gray"),
+    axis.ticks.x = element_line(color = "gray"),
+    legend.title = element_blank(),
+    legend.position = "top",
+    legend.key.size = unit(4, "mm"),
+    legend.justification.top = -0.5,
+    legend.text.position = "left",
+    legend.box.margin = margin(t = 0, b = 0, unit = "pt"),
+    title = element_text(hjust = 1),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    plot.margin = margin(10, 10, 10, 10),
+    plot.caption = element_text(hjust = 0.1, vjust = 0.1),
+  )
+
+theme_set(theme)
+
+# create accessible colour palette
+clr_plt <- hcl.colors(5, palette = "blue-red")
+# "#023FA5" "#A1A6C8" "#E2E2E2" "#CA9CA4" "#8E063B"
+```
+
+## Understanding the data
+
+In BC there were [**35,887**]{style="color:#023FA5;"} battery electric NMVR in the year of 2023, more than double from [**12,288**]{style="color:#023FA5;"} in 2019, only 4 years prior. Canada as a whole saw an even greater increase in battery electric NMVR over the past 4 years quadrupling from [**35,523**]{style="color:#8E063B;"} in 2019 to [**143,661**]{style="color:#8E063B"} in 2023. Keep in mind, 2024 data only includes Q1 and Q2, suggesting we are well on the way to once again breaking last year's EV registration record.
+
+```{r}
+#| code-fold: true
+#| layout-nrow: 2
+
+statscan_nmvr_kable <- statscan_nmvr_kable |>
+  
+  # these mutate calls are for highlighting the specific values in the table
+  # using cell_spec()
+  mutate(
+    `2023` = cell_spec(scales::comma(`2023`), "html",
+      color = case_when(`2023` == 35887 ~ clr_plt[1],
+        `2023` == 143661 ~ clr_plt[5],
+        .default = "black"
+      ),
+      bold = case_when(`2023` == 35887 | `2023` == 143661 ~ TRUE,
+        .default = FALSE
+      )
+    )
+  ) |>
+  mutate(
+    `2019` = cell_spec(scales::comma(`2019`), "html",
+      color = case_when(`2019` == 12288 ~ clr_plt[1],
+        `2019` == 35523 ~ clr_plt[5],
+        .default = "black"
+      ),
+      bold = case_when(`2019` == 12288 | `2019` == 35523 ~ TRUE,
+        .default = FALSE
+      )
+    )
+  )
+
+# building a table for BC
+statscan_nmvr_kable |>
+  filter(geo == bc_geo) |>
+  select(-geo) |>
+  kbl(
+    escape = FALSE, "html",
+
+    # we are using custom column names
+    col.names = my_col_names,
+    format.args = list(big.mark = ","), table.attr = "quarto-disable-processing=true", # disable quarto processing to avert bug that ignores styling
+    align = c("l", "r", "r", "r", "r", "r", "r")
+  ) |>
+  kable_styling(bootstrap_options = c("hover", "condensed"), html_font = "helvetica") |>
+  column_spec(1, width_min = "11em", bold = TRUE, border_right = TRUE) |>
+  row_spec(0, bold = TRUE, background = clr_plt[3], align = "r") |>
+  
+  # highlight the EV rows
+  row_spec(c(3), background = clr_plt[3]) |>
+  
+  # adding more custom headers
+  add_header_above(new_headers, background = clr_plt[3], bold = TRUE, align = list("l", "c", "c", "c", "c", "c", "c")) |>
+  add_header_above(c("Statistics" = 1, "Number of vehicles" = 6),
+    background = clr_plt[3],
+    bold = TRUE, align = list("r", "c")
+  ) |>
+  add_header_above(c("Vehicle type" = 1, "Total, vehicle type\u00B9" = 6),
+    background = clr_plt[3],
+    bold = TRUE, align = list("r", "c")
+  ) |>
+  add_header_above(c("Geography" = 1, "British Columbia and the Territories" = 6),
+    background = clr_plt[3],
+    bold = TRUE, align = list("r", "c")
+  ) |>
+  footnote(number = c("Total vehicle type excludes buses, trailers, recreational vehicles, motorcycles, snowmobiles, golf carts, etc.", "Other fuel types include liquid propane, natural gas, hydrogen, etc."))
+
+# building a table for Canada
+statscan_nmvr_kable |>
+  filter(geo == "Canada") |>
+  select(-geo) |>
+  kbl(
+    escape = FALSE, "html",
+
+    # we are using custom column names
+    col.names = my_col_names,
+    format.args = list(big.mark = ","), table.attr = "quarto-disable-processing=true", # disable quarto processing to avert bug that ignores styling
+    align = c("l", "r", "r", "r", "r", "r", "r")
+  ) |>
+  kable_styling(bootstrap_options = c("hover", "condensed"), html_font = "helvetica") |>
+  column_spec(1, width_min = "11em", bold = TRUE, border_right = TRUE) |>
+  row_spec(0, bold = TRUE, background = clr_plt[3], align = "r") |>
+  
+  # highlight the EV rows
+  row_spec(c(3), background = clr_plt[3]) |>
+  
+  # adding more custom headers
+  add_header_above(new_headers, background = clr_plt[3], bold = TRUE, align = list("l", "c", "c", "c", "c", "c", "c")) |>
+  add_header_above(c("Statistics" = 1, "Number of vehicles" = 6),
+    background = clr_plt[3],
+    bold = TRUE, align = list("r", "c")
+  ) |>
+  add_header_above(c("Vehicle type" = 1, "Total, vehicle type\u00B9" = 6),
+    background = clr_plt[3],
+    bold = TRUE, align = list("r", "c")
+  ) |>
+  add_header_above(c("Geography" = 1, "Canada" = 6),
+    background = clr_plt[3],
+    bold = TRUE, align = list("r", "c")
+  ) |>
+  footnote(number = c("Total vehicle type excludes buses, trailers, recreational vehicles, motorcycles, snowmobiles, golf carts, etc.", "Other fuel types include liquid propane, natural gas, hydrogen, etc."))
+
+
+```
+
+------------------------------------------------------------------------
+
+\n
+
+### The provinces
+
+How does BC compare to other provinces though? Which province has the highest share of EV NMVR for 2023?
+
+```{r}
+#| code-fold: true
+
+theme_set(theme)
+
+nmvr_province |>
+  # to place the ev share against the y axis subtract 'share' from 100
+  ggplot(aes(x = geo, y = 100 - share, label = 100 - share, fill = ev_fuel)) +
+
+  # use position "fill" to represent stacked columns as proportion of 100%
+  geom_col(position = "fill") +
+
+  # manually fill colour values
+  scale_fill_manual(
+    values = c(clr_plt[3], clr_plt[2]),
+    labels = c("Non-EV", "EV")
+  ) +
+
+  # change axis labels to represent percentages
+  scale_y_continuous(labels = scales::label_percent()) +
+
+  # add second geom layer to highlight BC
+  geom_col(
+    data = nmvr_bc, aes(
+      x = geo, y = share,
+      fill = ev_fuel
+    ),
+    position = "fill",
+    fill = c(clr_plt[1], clr_plt[3])
+  ) +
+  labs(
+    x = NULL, y = NULL,
+    title = "Share of new vehicle registerations that are electric, by Province, 2023",
+    subtitle = "Includes fully battery-electric and plug-in hybrids.",
+    caption = "Data source: Statistics Canada. Tables 20-10-0021-01 and 20-10-0024-01, New motor vehicle registrations"
+  ) +
+  geom_label(
+    data = nmvr_bc, aes(x = geo, y = label, label = str_c(as.character(round(share, 1)), "% of all BC NMVR were EV in 2023")),
+    show.legend = F, na.rm = T, nudge_y = 0.31, fill = "white", size = 3
+  ) +
+  geom_segment(aes(x = bc_geo, y = nmvr_bc_ev - 0.01, yend = nmvr_bc_ev + 0.04),
+    data = nmvr_bc, arrow = arrow(length = unit(0.15, "cm")),
+    color = "black", linetype = "solid", linewidth = 0.5
+  ) +
+  coord_flip()
+```
+
+### Rate of EV share increase
+
+We can visualize the share of total NMVR that are electric as it changes over time. We can also calculate and plot the rate of share increase.
+
+```{r}
+#| code-fold: true
+#| layout-nrow: 2
+
+theme_set(theme)
+
+# Create a line plot using the nmvr_quarterly_share dataset
+nmvr_quarterly_share_can |>
+  ggplot() +
+
+  # adding points to highlight the max values
+  geom_point(
+    data = nmvr_quarterly_share_can,
+    aes(
+      x = ref_date, y = ifelse(share == max(share), share, NA),
+      color = "Canada"
+    ), na.rm = T, show.legend = FALSE
+  ) +
+  geom_point(
+    data = nmvr_quarterly_share_bc,
+    aes(
+      x = ref_date, y = ifelse(share == max(share), share, NA),
+      color = "BC"
+    ), na.rm = T, show.legend = FALSE
+  ) +
+
+  # Format the y-axis to display percentages with 1% accuracy
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
+  
+  # Set custom x-axis scale for dates
+  scale_x_date(
+    breaks = as.Date(c("2018-01-01", "2020-01-01", "2022-01-01", "2024-01-01")), # Set specific break dates
+    labels = c("Q1 2018", "Q1 2020", "Q1 2022", "Q1 2024") # Custom labels for each break
+  ) +
+
+  # Add lines for Canada and BC share growth
+  geom_line(aes(x = ref_date, y = share, color = "Canada"),
+    linewidth = 1, show.legend = TRUE
+  ) +
+  geom_line(
+    data = nmvr_quarterly_share_bc,
+    aes(
+      x = nmvr_quarterly_share_bc$ref_date,
+      y = nmvr_quarterly_share_bc$share, color = "BC"
+    ),
+    linewidth = 1, show.legend = TRUE
+  ) +
+
+  # adding text labels for the max values
+  geom_text(
+    data = nmvr_quarterly_share_bc, aes(
+      x = ref_date, y = share,
+      label = ifelse(share == max(share),
+        str_c(round(share * 100, 2), "%"),
+        ""
+      )
+    ),
+    nudge_y = 0.007, size = 3, show.legend = FALSE
+  ) +
+  geom_text(
+    data = nmvr_quarterly_share_can, aes(
+      x = ref_date, y = share,
+      label = ifelse(share == max(share),
+        str_c(round(share * 100, 2), "%"),
+        ""
+      )
+    ),
+    nudge_y = 0.007, size = 3, show.legend = FALSE
+  ) +
+
+  # Manually set the color scale and provide labels for the legend
+  scale_colour_manual(
+    values = c("BC" = clr_plt[1], "Canada" = clr_plt[5]),
+    labels = c("BC", "Canada")
+  ) +
+  labs(
+    title = "Share of new registrations that are electric, Canada vs BC, Q1 2018 - Q2 2024",
+    subtitle = "Includes fully battery-electric and plug-in hybrids.",
+    caption = "Data source: Statistics Canada. Tables 20-10-0021-01 and 20-10-0024-01, New motor vehicle registrations"
+  ) +
+  ylab(label = "% of Total NMVR") +
+
+  # adjust theme
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(
+      size = 10, angle = 90,
+      margin = margin(r = 10, unit = "pt"),
+      vjust = 3, hjust = 0.5
+    ),
+    plot.title = element_text(vjust = 0.8),
+    legend.title = element_blank(),
+    legend.position = "inside",
+    legend.key.size = unit(4, "mm"),
+    legend.justification.inside = c(0, 1),
+    legend.text.position = "left",
+    legend.direction = "horizontal",
+    legend.box.margin = margin(t = 0, b = 0, unit = "pt"),
+  )
+
+# share rate change timeseries just for Canada
+nmvr_share_rate |>
+  ggplot(aes(x = year, y = share_growth)) +
+  geom_line(na.rm = T, linewidth = 1, colour = clr_plt[5]) +
+
+  # add smoothing to make trend more visible
+  geom_smooth(method = "loess", formula = "y ~ x", color = clr_plt[4], linewidth = 0.5, fill = clr_plt[3], na.rm = T) +
+
+  # make sure labels are in percent
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  labs(
+    title = "Rate of EV share change, YoY, Canada, 2012 - 2023",
+    subtitle = "Includes fully battery-electric and plug-in hybrids.",
+    caption = "Data source: Statistics Canada. Tables 20-10-0021-01 and 20-10-0024-01, New motor vehicle registrations"
+  ) +
+  ylab(label = "% Rate Change of EV Share") +
+
+  # adjust theme
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(
+      size = 10, angle = 90,
+      margin = margin(r = 10, unit = "pt"),
+      vjust = 3, hjust = 0.5
+    ),
+    plot.title = element_text(vjust = 0.8)
+  )
+```
+
+### Global data
+
+How does Canada's EV share growth compare to the top 5 countries with the highest EV share of total vehicle sales?
+
+```{r}
+#| code-fold: true
+theme_set(theme)
+
+ev_share_global_fill |>
+  ggplot(aes(x = year, y = ev_share)) +
+  geom_col(aes(fill = is_canada), show.legend = FALSE) +
+  scale_fill_manual(values = c("TRUE" = clr_plt[5], "FALSE" = clr_plt[3])) +
+  scale_y_continuous(labels = scales::percent) +
+
+  # adding labels of the maximum values with arrows
+  geom_segment(aes(x = 2020, xend = 2023, y = share),
+    data = max_share, arrow = arrow(length = unit(0.1, "cm")),
+    color = "black", linetype = "solid", linewidth = 0.5
+  ) +
+  geom_text(aes(x = 2020, y = share, label = scales::percent(share)),
+    data = max_share,
+    hjust = 1.1, color = "grey30", size = 3
+  ) +
+  labs(
+    x = NULL, y = NULL,
+    title = "Share of new cars sold that are electric (Top 5 + Canada), 2010 to 2023",
+    subtitle = "Includes fully battery-electric and plug-in hybrids.",
+    caption = "source: International Energy Agency. Global EV Outlook 2024. – processed by Our World in Data"
+  ) +
+
+  # facet wrap showing the x axis labels for each plot with all_x
+  facet_wrap(~entity, axes = "all_x")
+```
+
+### Estimating when EVs will dominate the market
+
+We can do an estimation of when the majority of cars on the road will be zero emission vehicles by using the summary function to find the distribution of the EV share rate. Then by using the mean and the min values, calculate a range of years representing "best-case" and "minimum" number of years.
+
+To achieve this we will use an exponential growth formula: $$x(t) = x_0(1 + r)^t$$
+
+Using the mean rate of growth, 0.53 and the current share of NMVR that are electric, 0.11, the equation evaluates to:
+
+$$ t = \frac{log(1 / 0.11)}{log(1 + 0.49)}$$
+
+The following code will find the range of years using the mean and min rate of growth.
+
+```{r}
+# filter outlier
+nmvr_share_rate <- nmvr_share_rate |>
+  filter(year > 2012)
+
+summary(nmvr_share_rate$share_growth)
+```
+
+We will define a function to calculate exponential growth:
+
+```{r}
+#| code-fold: true
+
+# create a function to find when at the current mean and min rate of share growth
+# 100% of NMVR will be EV
+ev_saturation_func <- function(df, share, year, rate) {
+  # Calculate the average growth rate
+  average_growth <- mean(rate[!is.na(rate)]) / 100 # Convert percentage to a decimal
+
+  # using the min rate
+  min_growth <- min(rate, na.rm = TRUE) / 100
+
+  # Use the current share and growth rate to predict when it reaches 100%
+  current_year <- max(year)
+  current_share <- tail(share, 1)
+
+  # Solve for t when share reaches 100% using exponential growth formula
+  t <- log(1 / current_share) / log(1 + average_growth)
+  v <- log(1 / current_share) / log(1 + min_growth)
+
+  # Calculate the future year
+  future_year <- current_year + t
+  future_year2 <- current_year + v
+  str_c(
+    "With a constant rate of ", round(min_growth * 100, 1),
+    "% - ", round(average_growth * 100, 1),
+    "%, the share of total new vehicles that are electric will reach 100% by ",
+    round(future_year), "-", round(future_year2)
+  )
+}
+```
+
+```{r}
+# run function
+ev_saturation_func(
+  nmvr_share_rate,
+  nmvr_share_rate$share,
+  nmvr_share_rate$year,
+  nmvr_share_rate$share_growth
+)
+```
+
+```{r}
+summary(global_share_growth$share_growth)
+```
+
+```{r}
+
+# run function
+ev_saturation_func(
+  global_share_growth,
+  global_share_growth$ev_yearly_share,
+  global_share_growth$year,
+  global_share_growth$share_growth
+)
+```
+
+## Key findings
+
+In BC the share of registrations that were EV was **20.7% in 2023**, compared to **around 13% in all of Canada**. The share of new vehicle registrations that are electric in Canada is rapidly growing, averaging **53% per year**.
+
+Assuming the rate of growth remains steady, new vehicle registrations in Canada will be **predominately zero emission within the next 4-11 years**. Although it is unlikely the rate will stay constant, nor is it likely everyone will want to drive an EV, it is evident that Canada is shifting rapidly towards an EV future.
+
+Globally, Norway is leading the way with **93% of 2023's car sales** being EV. Iceland follows closely at **71%**. The share rate of growth of total vehicle sales that are EV has a much broader distribution range from a minimum of 8.3% to the mean of 97.5%. If those rates are maintained, global new vehicle registrations could be **predominately zero emission within the next 2-20 years**.

@@ -1,0 +1,22 @@
+---
+title: "Defi Research Dashboard"
+subtitle: "A tool for researching defi projects using the Defi Llama REST API."
+author: Skylar Carroll
+format: 
+  html:
+    embed-resources: true
+    df-print: paged
+date: "Nov 11, 2024"
+title-block-style: default
+title-block-banner: true
+image: "thumbnail.jpg"
+categories: 
+  - powerbi
+---
+### Defi Llama
+[Defi Llama](https://defillama.com/) is a defi research and tracking website with a public REST API. I designed a simple interface to quickly find new or fast moving defi projects, filtered by type or chain, with search options to find specific protocols.
+
+I used PowerBI to connect to web sources. I transformed the json data in powerquery and removed the data I wasn't interested in. After building a few table relationships and measure, I designed and built a dashboard.
+
+![](dashboard.gif)
+[navigate to dashboard](https://community.fabric.microsoft.com/t5/Data-Stories-Gallery/Defi-Llama-API-V2/m-p/4277250)
