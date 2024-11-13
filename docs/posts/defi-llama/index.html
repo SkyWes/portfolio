@@ -3393,6 +3393,13 @@ vertical-align: -.125em;
 
 <style type="text/css">
 </style>
+<meta property="og:title" content="Defi Research Dashboard">
+<meta property="og:description" content="A tool for researching defi projects using the Defi Llama REST API.">
+<meta property="og:image" content="https://skywes.github.io/portfolio/posts/defi-llama/thumbnail.jpg">
+<meta name="twitter:title" content="Defi Research Dashboard">
+<meta name="twitter:description" content="A tool for researching defi projects using the Defi Llama REST API.">
+<meta name="twitter:image" content="https://skywes.github.io/portfolio/posts/defi-llama/thumbnail.jpg">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed fullcontent">
@@ -3574,7 +3581,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/skywes\.github\.io\/portfolio\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

@@ -3,6 +3,9 @@ project:
   output-dir: docs
 
 website:
+  open-graph: true
+  site-url: https://skywes.github.io/portfolio/
+  twitter-card: true
   search: false
   navbar:
     left: 

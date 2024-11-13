@@ -56,7 +56,7 @@ After import, the two images were merged to form a single comprehensive NDVI ima
 To calculate accurate vegetation density statistics, I created a mask to exclude water data:
 
 
-![Masked NDVI](data/ndvi-masked.JPG){width="70%"}{.lightbox}
+![Masked NDVI](data/ndvi-masked.JPG){width="70%"}
 
 #### 3. Calculating and Visualizing NDVI
 
