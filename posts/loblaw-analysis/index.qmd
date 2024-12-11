@@ -9,6 +9,7 @@ format:
 date: "Dec 10, 2024"
 table-of-contents: true
 toc-location: left
+toc-depth: 3
 title-block-style: default
 title-block-banner: true
 image: "thumbnail.jpg"
@@ -19,17 +20,17 @@ categories:
 
 ### Introduction
 
-A team based decision support and BI project for UVic's BIDA 301: Business Intelligence and Data Analytics Fundamentals course. Students were tasked with planning the analysis of a real-world dataset. Deliverables of the project were completed in three sprints:
+A team based decision support and BI project for UVic's BIDA 301: Business Intelligence and Data Analytics Fundamentals course. Students were tasked with planning the analysis of a real-world dataset. Deliverables of the project were completed in three sprints over the course of 3 weeks:
 
 -   a proposal
 -   an execution plan and
 -   a comprehensive visualization, project report, and a PowerPoint presentation to be presented by all team members to the class.
 
-Download the full report [here](data/Final%20Report_%20Comparative%20Analysis%20of%20Loblaw%20Sales%20and%20External%20Economic%20Factors.docx). Download the PowerPoint [here](Group%20Project%20Team%205%20-%20Loblaw%20Sales%20and%20Economic%20Factors_FINAL.pptx). Explore the Tableau [here](https://public.tableau.com/app/profile/skylar.carroll/viz/BIDA301-Loblaw/LoblawSalesandExternalEconomicFactors).
+Download the PowerPoint files [here](https://github.com/SkyWes/portfolio/tree/main/posts/loblaw-analysis/data). Explore the Tableau [here](https://public.tableau.com/app/profile/skylar.carroll/viz/BIDA301-Loblaw/LoblawSalesandExternalEconomicFactors).
 
 ### Tools and Methods
 
-Powerquery for data extraction - Excel for linear regression and Holt-Winter analysis - Tableau for visualization - Power Point for presentation slides.
+PowerQuery for data extraction - Excel for linear regression and Holt-Winter analysis - Tableau for visualization - Power Point for presentation slides.
 
 ### Problem Statement
 
@@ -37,13 +38,13 @@ How do Food Consumer Price Index (CPI) fluctuations, global supply chain disrupt
 
 ### The Data
 
-We used PowerQuery to extract tables from 10 years of Loblaw annual financial reports https://www.loblaw.ca/en/investors-reports/ (2022-2024 https://www.sedarplus.ca (pre-2022)
+We used PowerQuery to extract tables from 10 years of Loblaw annual financial reports <https://www.loblaw.ca/en/investors-reports/> (2022-2024) <https://www.sedarplus.ca> (pre-2022)
 
-Consumer price index (CPI) - Consumer Price Index (all-items) measures the average change over time in the prices paid by consumers for a wide range of goods and services, including food, housing, transportation, and medical care. https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810025601
+Consumer price index (CPI) - Consumer Price Index (all-items) measures the average change over time in the prices paid by consumers for a wide range of goods and services, including food, housing, transportation, and medical care. <https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810025601>
 
-Real household disposable income (RHDI) - the income available to households after taxes, adjusted for inflation. It represents the amount of money that households have available to spend or save, considering changes in price levels. https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610010501
+Real household disposable income (RHDI) - the income available to households after taxes, adjusted for inflation. It represents the amount of money that households have available to spend or save, considering changes in price levels. <https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610010501>
 
-Global supply chain pressure index (GSCPI) - a composite index that tracks global supply chain disruptions. It combines several factors such as transportation costs, delivery times, and supply shortages to measure the overall stress on global supply chains. https://www.statista.com/statistics/1315308/global-supply-chain-pressure-index/
+Global supply chain pressure index (GSCPI) - a composite index that tracks global supply chain disruptions. It combines several factors such as transportation costs, delivery times, and supply shortages to measure the overall stress on global supply chains. <https://www.statista.com/statistics/1315308/global-supply-chain-pressure-index/>
 
 ### Analytic Approach
 
@@ -51,17 +52,17 @@ Global supply chain pressure index (GSCPI) - a composite index that tracks globa
 
 ![](loblaw-sales-regression.jpg "Linear Regression")
 
-To determine whether any of the three independent variables (CPI, RHDI and GSCPI) correlate with Loblaw’s sales, regression analysis is done using the 4-quarter sales moving average to adjust the sales data with seasonality (as shown above). Using the smoothened series, Loblaw’s sales resulted in a strong correlation (R square = 88%) between Food CPI and RHDI, both variables having P-values less than 0.05. Global supply chain pressure index (GSCPI) has a P-value higher than 0.05, which means it is not a significant predictor of Sales, so we removed the GSCPI variable to show a more accurate model. In the regression output above, all the P-values are now showing below 0.05., while the R square value also remains at 0.8754, a strong fit of correlation, which means 88% of observations in Loblaw’s smoothened Sales series are explained by Food CPI and RHDI.
+To determine whether any of the three independent variables (CPI, RHDI and GSCPI) correlate with Loblaw’s sales, regression analysis is done using the 4-quarter sales moving average to adjust the sales data with seasonality (as shown above). Using the smoothed series, Loblaw’s sales resulted in a strong correlation (R square = 88%) between Food CPI and RHDI, both variables having P-values less than 0.05. Global supply chain pressure index (GSCPI) has a P-value higher than 0.05, which means it is not a significant predictor of Sales, so we removed the GSCPI variable to create a more accurate model. In the regression output above, all the P-values are now showing below 0.05, while the R square value also remains at 0.8754, a strong fit of correlation, which means 88% of observations in Loblaw’s smoothed Sales series are explained by Food CPI and RHDI.
 
 #### Sales Forecasting
 
 ![](loblaw-sales-holt-winter.jpg) ![](loblaw-sales-holt-winter-detail.jpg)
 
-Using Holt-Winter’s method, optimal values for values for alpha, beta and gamma are found and a 12-month forecast for sales is created. This will be used to optimize Loblaw’s inventory levels and drive promotion strategies to anticipate demand on the forecasted sales. Even so, with heteroskedasticity in the scatter plots, the model would not be able to fully capture the data's dynamics. Thus, qualitative factors must be considered, understanding the business issue to look at retail industry trends, competition, regulatory policies and consumer behavior that may help manage sales forecasting moving forward.
+Using Holt-Winter’s method, optimal values for values for alpha, beta and gamma are found and a 12-month forecast for sales is created. This will be used to optimize Loblaw’s inventory levels and drive promotion strategies to anticipate demand on the forecast sales. Even so, with heteroskedasticity in the scatter plots, the model would not be able to fully capture the data dynamics. Thus, qualitative factors must be considered, understanding the business issue to look at retail industry trends, competition, regulatory policies and consumer behavior that may help manage sales forecasting moving forward.
 
 #### Limitations:
 
-The financial performance of one grocery conglomerate (Loblaws) is not indicative of the performance of the grocery retail market overall.
+The financial performance of one grocery conglomerate (Loblaw) is not indicative of the performance of the grocery retail market overall.
 
 Global supply chain disruption indicators may not fully capture the complexities of Loblaw’s operations and localized issues in Canada.
 
