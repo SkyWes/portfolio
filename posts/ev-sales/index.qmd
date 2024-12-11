@@ -11,6 +11,8 @@ table-of-contents: true
 toc-location: left
 title-block-style: default
 title-block-banner: true
+code-fold: true
+code-tools: true
 image: "thumbnail.jpg"
 categories:
   - R
