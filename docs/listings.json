@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/ga4/index.html",
       "/posts/loblaw-analysis/index.html",
       "/posts/ev-sales/index.html",
       "/posts/ndvi-vs-income/index.html",
