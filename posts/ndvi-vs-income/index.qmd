@@ -17,6 +17,7 @@ categories:
   - python
   - powerbi
 ---
+I used satellite data to analyze vegetation density and compared it to Stats Canada income data using Python and Power BI.
 
 ##### Download the [python notebook](https://github.com/SkyWes/ndvi-and-income)
 

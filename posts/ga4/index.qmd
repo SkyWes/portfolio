@@ -1,0 +1,324 @@
+---
+title: "How to Flatten Google Analytics 4 Data Structures in BigQuery"
+subtitle: "Extracting minimal GA4 event data for Power BI modeling"
+author: Skylar Carroll
+format: 
+  html:
+    embed-resources: true
+    df-print: paged
+date: "March 8, 2025"
+table-of-contents: true
+toc-location: left
+title-block-style: default
+title-block-banner: true
+code-fold: true
+code-tools: true
+image: "thumbnail.jpg"
+categories:
+  - SQL
+  - PowerBi
+---
+
+This project provides a strategy for extracting and transforming GA4 data using SQL to build a simple and scalable semantic model for Power BI.
+
+## Key Challenges and Solutions
+
+-   **Complex Data Structures:** While GA4's use of 'STRUCT' and 'ARRAY' nested data types enable efficient storage of complex, hierarchical user interactions, they do require careful handling for querying and extraction.
+-   **Data Selection** It is critical to understand the definitions of each attribute and what they represent. GA4 documentation should be referenced carefully, and audits be conducted before launching any live service dashboard.
+-   **Data Extraction:** GA4's new event-based model means large amounts of traffic may create thousands of rows in the database per second. For a high-level dashboard to operate smoothly in Power BI, data needs to be selected strategically. The SQL queries utilize `UNNEST`, `LEFT JOIN` and `subqueries` to flatten arrays and extract relevant data.
+-   **Data Transformation:** Data is transformed and cleaned to create meaningful insights, such as cleaning page titles and calculating session engagement metrics.
+-   **Semantic Modeling:** The goal is to create a simplified semantic model suitable for Power BI analysis, focusing on user sessions, purchase details, and item information.
+
+## SQL Queries Explained
+
+Here's a breakdown of the provided SQL queries:
+
+### 1. Session-Level Data Extraction
+
+-   This query extracts session-level information, including timestamps, user IDs, page views, and traffic sources. It also creates unique keys for session analysis and cleans page titles for better readability.
+
+``` sql
+
+-- Define a common table expression (CTE) to extract session-level data from Google Analytics 4 (GA4) event logs
+WITH session_level AS (
+  SELECT
+    event_date, -- The date of the event
+    extract(
+      datetime
+      FROM
+        timestamp_micros(event_timestamp)
+    ) AS event_timestamp, -- Convert event timestamp to a readable datetime format
+    user_pseudo_id,
+    
+    -- Create a unique join key for session-level analysis by combining user ID, session ID, timestamp, and event name
+    concat(
+      user_pseudo_id,
+      (
+        SELECT
+          value.int_value
+        FROM
+          unnest(event_params)
+        WHERE
+          KEY = 'ga_session_id'
+      ),
+      event_timestamp,
+      event_name
+    ) AS join_key,
+    
+    -- Create a session key using user ID and session ID
+    concat(
+      user_pseudo_id,
+      (
+        SELECT
+          value.int_value
+        FROM
+          unnest(event_params)
+        WHERE
+          KEY = 'ga_session_id'
+      )
+    ) AS session_key,
+    event_name,
+    
+    -- Extract the page title from event parameters
+    (
+      SELECT
+        value.string_value
+      FROM
+        unnest(event_params)
+      WHERE
+        KEY = 'page_title'
+    ) AS page_title,
+    
+    -- Extract the page URL from event parameters
+    (
+      SELECT
+        value.string_value
+      FROM
+        unnest(event_params)
+      WHERE
+        KEY = 'page_location'
+    ) AS page_location,
+    
+    -- Extract engagement time (in milliseconds) from event parameters
+    (
+      SELECT
+        value.int_value
+      FROM
+        unnest(event_params)
+      WHERE
+        KEY = 'engagement_time_msec'
+    ) AS event_engagement_time_msec,
+    
+    -- Extract traffic source information (where the user came from)
+    traffic_source.name AS traffic_source_name,
+    traffic_source.medium AS traffic_source_medium,
+    traffic_source.source AS traffic_source_source,
+    device.category AS device
+  FROM
+    -- change this to your google analytics 4 export location in bigquery
+    `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`
+  WHERE
+    _table_suffix BETWEEN '20201231'
+    AND '20210131'
+),
+
+-- Define another CTE to clean and standardize page titles
+page_clean AS (
+  SELECT
+    *
+  EXCEPT
+    (page_title),
+    
+    -- Clean the page_title field
+    CASE WHEN page_title IS NULL THEN REPLACE(
+      REGEXP_EXTRACT(
+        REGEXP_REPLACE(trim(page_location), r '/$', ''),
+        r '[^/]+$'
+      ),
+      r '[+-]',
+      ' '
+    ) 
+    -- Extract last part of URL as a fallback page title, replacing special characters
+    WHEN trim(page_location) = trim("https://shop.googlemerchandisestore.com/New/") THEN "New" WHEN trim(page_location) = trim(
+      "https://shop.googlemerchandisestore.com/details/New/New/GGL1720_Google Notabag - Blue"
+    ) THEN "Google Notabag - Blue" WHEN trim(page_location) = trim(
+      "https://shop.googlemerchandisestore.com/details/New/New/GGL1720_Google"
+    ) THEN "GGL1720_Google" WHEN trim(page_location) = trim(
+      "https://shop.googlemerchandisestore.com/google+redesign/apparel/google+kirkland+campus+unisex+tee"
+    ) THEN "google+kirkland+campus+unisex+tee" ELSE page_title -- Keep the original page title if available
+    END AS page_title_cleaned
+  FROM
+    session_level
+)
+SELECT
+  *
+FROM
+  page_clean
+```
+
+### 2. User-Level Aggregation
+
+-   This query aggregates user-level data, such as lifetime value (LTV), country, and region.
+
+``` sql
+-- Aggregate user-level data from Google Analytics 4 (GA4) event logs
+SELECT
+  user_pseudo_id, -- Anonymous user identifier
+  
+  -- Calculate the average lifetime value (LTV) revenue per user
+  AVG(user_ltv.revenue) AS ltv,
+  
+  -- Retrieve the latest currency associated with the user's LTV
+  MAX(user_ltv.currency) AS ltv_currency,
+  
+  -- Get the most recent country associated with the user
+  MAX(geo.country) AS country,
+  
+  -- Get the most recent region (state/province) associated with the user
+  MAX(geo.region) AS region
+FROM
+  -- Replace this with your GA4 BigQuery export table
+  `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`
+WHERE
+  -- Filter for events within the specified date range
+  _table_suffix BETWEEN '20201231'
+  AND '20210131'
+GROUP BY
+  user_pseudo_id; -- Aggregate data at the user level
+```
+
+### 3. Item Details
+
+-   This query retrieves item-related information.
+
+``` sql
+-- Extract and aggregate item details from Google Analytics 4 (GA4) event logs
+SELECT
+  i.item_id, -- Unique identifier for the item
+  i.item_name, -- Name of the item
+  
+  -- Retrieve the most recent category associated with the item
+  MAX(i.item_category) AS category
+FROM
+  -- Replace this with your GA4 BigQuery export table
+  `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`,
+  
+  -- Expand the nested 'items' array to extract individual item details
+  UNNEST(items) AS i
+GROUP BY
+  i.item_id, -- Group by item ID to aggregate item-level data
+  i.item_name; -- Group by item name to maintain unique item records
+```
+
+### 4. Purchase - event level
+
+-   This query extracts details of each purchase event.
+
+``` sql
+--purchase
+
+SELECT concat(user_pseudo_id,
+                (SELECT value.int_value
+                 FROM unnest(event_params)
+                 WHERE KEY = 'ga_session_id'),event_timestamp, event_name) AS join_key,
+       ecommerce.transaction_id,
+       ecommerce.total_item_quantity,
+       ecommerce.purchase_revenue_in_usd,
+       ecommerce.purchase_revenue,
+       ecommerce.refund_value_in_usd,
+       ecommerce.refund_value,
+       ecommerce.shipping_value_in_usd,
+       ecommerce.shipping_value,
+       ecommerce.tax_value_in_usd,
+       ecommerce.tax_value,
+       ecommerce.unique_items
+FROM -- change this to your google analytics 4 export location in bigquery
+ `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`
+WHERE event_name = 'purchase'
+  AND _table_suffix BETWEEN '20201231' AND '20210131'
+```
+
+### 5. Purchase Details - Item level
+
+-   This query extracts detailed information about purchased items, including item IDs, names, prices, and quantities.
+
+``` sql
+--purchase details
+
+SELECT event_timestamp,
+       concat(user_pseudo_id,
+                (SELECT value.int_value
+                 FROM unnest(event_params)
+                 WHERE KEY = 'ga_session_id'),event_timestamp, event_name) AS join_key,
+       i.item_id,
+       i.item_name,
+       i.item_brand,
+       i.item_variant,
+       i.item_category,
+       i.coupon,
+       i.affiliation,
+       i.location_id,
+       i.item_list_id,
+       i.item_list_name,
+       i.item_list_index,
+       i.promotion_id,
+       i.promotion_name,
+       i.creative_name,
+       i.creative_slot,
+       i.price_in_usd,
+       i.price,
+       i.quantity,
+       i.item_revenue_in_usd,
+       i.item_revenue,
+       i.item_refund_in_usd
+FROM -- change this to your google analytics 4 export location in bigquery
+ `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`
+LEFT JOIN unnest(items) i
+WHERE event_name = 'purchase'
+  AND _table_suffix BETWEEN '20201231' AND '20210131'
+```
+
+### 6. Session Analysis
+
+-   This query calculates session metrics like session duration, engagement, and unique page views.
+
+``` sql
+--sessions
+WITH prep AS
+  (SELECT event_timestamp,
+          concat(user_pseudo_id,
+                   (SELECT value.int_value
+                    FROM unnest(event_params)
+                    WHERE KEY = 'ga_session_id')) AS session_key,
+          coalesce(cast(
+                          (SELECT value.string_value
+                           FROM unnest(event_params)
+                           WHERE KEY = 'session_engaged') AS int), 0) AS session_engaged,
+          count(DISTINCT
+                  (SELECT value.string_value
+                   FROM unnest(event_params)
+                   WHERE KEY = 'page_location')) over(PARTITION BY user_pseudo_id,
+                                                        (SELECT value.int_value
+                                                         FROM unnest(event_params)
+                                                         WHERE KEY = 'ga_session_id')) AS unique_page_views,
+
+     (SELECT value.int_value
+      FROM unnest(event_params)
+      WHERE KEY = 'engagement_time_msec') AS session_engagement_time_msec
+   FROM -- change this to your google analytics 4 export location in bigquery
+ `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`
+   WHERE _table_suffix BETWEEN '20201231' AND '20210131')
+SELECT max(event_timestamp) - min(event_timestamp) AS session_duration_msec,
+       session_key,
+       max(session_engaged) AS session_engaged,
+       max(unique_page_views) AS upv,
+       sum(session_engagement_time_msec) AS session_engagement_time_msec
+FROM prep
+GROUP BY session_key
+```
+
+## Semantic Model
+
+The extracted and transformed data can be used to build a semantic model in Power BI, enabling interactive analysis and reporting.
+
+![Semantic Model](thumbnail.jpg)

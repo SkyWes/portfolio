@@ -16,8 +16,6 @@ about:
       href: https://github.com/SkyWes?tab=repositories
 ---
 
-In 2021, Skylar transitioned from a career as a cook to trading commodities full-time, leveraging a custom-built trading program to analyze performance and increase annual net profit by 15%. This work sparked a passion for data analysis, leading him to pursue advanced skills in business intelligence.
+In 2021, Skylar transitioned from a career as a cook to trading commodities full-time, leveraging a custom-built trading program to automate trade execution and analyze performance leading to an increase in annual net profit by 15%. This work sparked a passion for data analysis, leading him to pursue advanced skills in business intelligence.
 
-Skylar is Microsoft Certified in PowerBI and is currently completing the Business Intelligence and Data Analytics program at the University of Victoria.
-
-He is eager to begin his career as a data analyst and ultimately pursue a bachelor’s degree in computer science. Connect with him via email or LinkedIn to discuss his potential fit for your team.
+Skylar is excited by building new tools and automating workflows to help businesses and organizations save time and money. He is Microsoft Certified in Power BI and has obtained the Business Intelligence and Data Analytics Micro-certificate from the University of Victoria.
