@@ -81,7 +81,7 @@
     "href": "posts/ga4/index.html",
     "title": "Transforming GA4 Data into Actionable Insights with SQL + Power BI",
     "section": "",
-    "text": "This project began with a question, “How can we flatten and extract minimal GA4 data to produce a light weight semantic model in Power BI?” GA4’s event-based data can result in hundreds of thousands of rows of data per month and due to the nested STRUCT and ARRAY data types, flattening event data multiplies the number of rows for any given user session. It becomes impractical and unnecessary to extract every single field for an effective, high-level Power BI dashboard."
+    "text": "This project began with a question, “How can we flatten and extract minimal GA4 data to produce a light-weight semantic model in Power BI?” GA4’s event-based data can result in hundreds of thousands of rows of data per month and due to the nested STRUCT and ARRAY data types, flattening event data multiplies the number of rows for any given user session.\nIt quickly becomes impractical and unnecessary to extract every single field for an effective, high-level Power BI dashboard."
   },
   {
     "objectID": "posts/ga4/index.html#quarto",

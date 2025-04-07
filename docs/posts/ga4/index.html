@@ -3531,15 +3531,16 @@ vertical-align: -.125em;
 
 
 
-<p>This project began with a question, “How can we flatten and extract minimal GA4 data to produce a light weight semantic model in Power BI?” GA4’s event-based data can result in hundreds of thousands of rows of data per month and due to the nested STRUCT and ARRAY data types, flattening event data multiplies the number of rows for any given user session. It becomes impractical and unnecessary to extract every single field for an effective, high-level Power BI dashboard.</p>
+<p>This project began with a question, “How can we flatten and extract minimal GA4 data to produce a light-weight semantic model in Power BI?” GA4’s event-based data can result in hundreds of thousands of rows of data per month and due to the nested STRUCT and ARRAY data types, flattening event data multiplies the number of rows for any given user session.</p>
+<p>It quickly becomes impractical and unnecessary to extract every single field for an effective, high-level Power BI dashboard.</p>
 <section id="key-challenges-and-solutions" class="level2">
 <h2 class="anchored" data-anchor-id="key-challenges-and-solutions">Key Challenges and Solutions</h2>
 <ul>
-<li><strong>Complex Data Structures:</strong> While GA4’s use of ‘STRUCT’ and ‘ARRAY’ nested data types enable efficient storage of complex, hierarchical user interactions, they do require careful handling for querying and extraction.</li>
-<li><strong>Data Selection</strong>: A list of all required attributes should be created before beginning to write the SQL. It is critical to understand the definitions of each attribute and what they represent. GA4 documentation should be referenced carefully, and audits be conducted before launching any live service dashboard.</li>
-<li><strong>Data Extraction:</strong> The SQL queries utilize <code>UNNEST</code>, <code>LEFT JOIN</code> and <code>subqueries</code> to flatten ‘ARRAY’ and ‘STRUCT’ data. This multiplies the number of rows per session and GA4’s new event-based model means large amounts of traffic may create thousands of rows in the database per second. For a high-level dashboard to operate smoothly in Power BI, data needs to be selected strategically.</li>
-<li><strong>Data Transformation:</strong> It’s best practice to transform and clean your data in SQL as much as possible to create meaningful insights, such as cleaning page titles and calculating session engagement metrics. Query folding in Power Query doesn’t always work and transformations can create performance bottlenecks. Let the source do the heavy lifting.</li>
-<li><strong>Semantic Modeling:</strong> The goal is to create a simplified semantic model suitable for Power BI analysis, focusing on user sessions, purchase details, and item information. Parameters as start and end dates allow for easy updates.</li>
+<li><p><strong>Complex Data Structures:</strong> While GA4’s use of ‘STRUCT’ and ‘ARRAY’ nested data types enable efficient storage of complex, hierarchical user interactions, they do require careful handling for querying and extraction.</p></li>
+<li><p><strong>Data Selection</strong>: A list of all required attributes should be created before beginning to write the SQL. It is critical to understand the definitions of each attribute and what they represent. GA4 documentation should be referenced carefully, and audits be conducted before launching any live service dashboard.</p></li>
+<li><p><strong>Data Extraction:</strong> The SQL queries utilize <code>UNNEST</code>, <code>LEFT JOIN</code> and <code>subqueries</code> to flatten ‘ARRAY’ and ‘STRUCT’ data. This multiplies the number of rows per session and GA4’s new event-based model means large amounts of traffic may create thousands of rows in the database per second. For a high-level dashboard to operate smoothly in Power BI, data needs to be selected strategically.</p></li>
+<li><p><strong>Data Transformation:</strong> It’s best practice to transform and clean your data in SQL as much as possible to create meaningful insights, such as cleaning page titles and calculating session engagement metrics. Query folding in Power Query doesn’t always work and transformations can create performance bottlenecks. Let the source do the heavy lifting.</p></li>
+<li><p><strong>Semantic Modeling:</strong> The goal is to create a simplified semantic model suitable for Power BI analysis, focusing on user sessions, purchase details, and item information. Parameters as start and end dates allow for easy updates.</p></li>
 </ul>
 </section>
 <section id="sql-queries-explained" class="level2">
@@ -4339,304 +4340,308 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Challenges and Solutions</span></span>
 <span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Complex Data Structures:** While GA4&#39;s use of &#39;STRUCT&#39; and &#39;ARRAY&#39; nested data types enable efficient storage of complex, hierarchical user interactions, they do require careful handling for querying and extraction.</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Data Selection**: A list of all required attributes should be created before beginning to write the SQL. It is critical to understand the definitions of each attribute and what they represent. GA4 documentation should be referenced carefully, and audits be conducted before launching any live service dashboard.</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Data Extraction:** The SQL queries utilize <span class="in">`UNNEST`</span>, <span class="in">`LEFT JOIN`</span> and <span class="in">`subqueries`</span> to flatten &#39;ARRAY&#39; and &#39;STRUCT&#39; data. This multiplies the number of rows per session and GA4&#39;s new event-based model means large amounts of traffic may create thousands of rows in the database per second. For a high-level dashboard to operate smoothly in Power BI, data needs to be selected strategically.</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Data Transformation:** It&#39;s best practice to transform and clean your data in SQL as much as possible to create meaningful insights, such as cleaning page titles and calculating session engagement metrics. Query folding in Power Query doesn&#39;t always work and transformations can create performance bottlenecks. Let the source do the heavy lifting.</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Semantic Modeling:** The goal is to create a simplified semantic model suitable for Power BI analysis, focusing on user sessions, purchase details, and item information. Parameters as start and end dates allow for easy updates.</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Data Selection**: A list of all required attributes should be created before beginning to write the SQL. It is critical to understand the definitions of each attribute and what they represent. GA4 documentation should be referenced carefully, and audits be conducted before launching any live service dashboard.</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Data Extraction:** The SQL queries utilize <span class="in">`UNNEST`</span>, <span class="in">`LEFT JOIN`</span> and <span class="in">`subqueries`</span> to flatten &#39;ARRAY&#39; and &#39;STRUCT&#39; data. This multiplies the number of rows per session and GA4&#39;s new event-based model means large amounts of traffic may create thousands of rows in the database per second. For a high-level dashboard to operate smoothly in Power BI, data needs to be selected strategically.</span>
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## SQL Queries Explained</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Data Transformation:** It&#39;s best practice to transform and clean your data in SQL as much as possible to create meaningful insights, such as cleaning page titles and calculating session engagement metrics. Query folding in Power Query doesn&#39;t always work and transformations can create performance bottlenecks. Let the source do the heavy lifting.</span>
 <span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>Here&#39;s a breakdown of the SQL queries:</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Semantic Modeling:** The goal is to create a simplified semantic model suitable for Power BI analysis, focusing on user sessions, purchase details, and item information. Parameters as start and end dates allow for easy updates.</span>
 <span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1. Session-Level Data Extraction</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## SQL Queries Explained</span></span>
 <span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query extracts session-level information, including timestamps, user IDs, page views, and traffic sources. It also creates unique keys for session analysis and cleans page titles for better readability.</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>Here&#39;s a breakdown of the SQL queries:</span>
 <span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1. Session-Level Data Extraction</span></span>
 <span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co">-- Define a CTE to extract session-level data from GA4 event logs</span></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> session_level <span class="kw">AS</span> (</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    event_date, <span class="co">-- The date of the event</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">extract</span>(</span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>      <span class="dt">datetime</span></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>        timestamp_micros(event_timestamp)</span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> event_timestamp, <span class="co">-- Convert event timestamp to a readable datetime format</span></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>    user_pseudo_id,</span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Create a unique join key for session-level analysis by combining user ID, session ID, timestamp, and event name</span></span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">concat</span>(</span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>      user_pseudo_id,</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>      (</span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span></span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>          value<span class="ch">.</span>int_value</span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>        <span class="kw">FROM</span></span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>          unnest(event_params)</span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>        <span class="kw">WHERE</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>          <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>      event_timestamp,</span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>      event_name</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> join_key,</span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Create a session key using user ID and session ID</span></span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">concat</span>(</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>      user_pseudo_id,</span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>      (</span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span></span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>          value<span class="ch">.</span>int_value</span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>        <span class="kw">FROM</span></span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>          unnest(event_params)</span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>        <span class="kw">WHERE</span></span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>          <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span></span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> session_key,</span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>    event_name,</span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract the page title from event parameters</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>    (</span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>      <span class="kw">SELECT</span></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>        value<span class="ch">.</span>string_value</span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span></span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>        unnest(event_params)</span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span></span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>        <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;page_title&#39;</span></span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> page_title,</span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract the page URL from event parameters</span></span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>    (</span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>      <span class="kw">SELECT</span></span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>        value<span class="ch">.</span>string_value</span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span></span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>        unnest(event_params)</span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span></span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>        <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;page_location&#39;</span></span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> page_location,</span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract engagement time (in milliseconds) from event parameters</span></span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>    (</span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>      <span class="kw">SELECT</span></span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>        value<span class="ch">.</span>int_value</span>
-<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span></span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>        unnest(event_params)</span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span></span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>        <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;engagement_time_msec&#39;</span></span>
-<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> event_engagement_time_msec,</span>
-<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract traffic source information (where the user came from)</span></span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>    traffic_source<span class="ch">.</span>name <span class="kw">AS</span> traffic_source_name,</span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>    traffic_source<span class="ch">.</span>medium <span class="kw">AS</span> traffic_source_medium,</span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>    traffic_source<span class="ch">.</span>source <span class="kw">AS</span> traffic_source_source,</span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>    device<span class="ch">.</span>category <span class="kw">AS</span> device</span>
-<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span></span>
-<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- change this to your google analytics 4 export location in bigquery</span></span>
-<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>    <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
-<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span></span>
-<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>    _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="co">-- Change the dates to your parameters in Power Query M code</span></span>
-<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>    <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span></span>
-<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>),</span>
-<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a><span class="co">-- Define another CTE to clean and standardize page titles</span></span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>page_clean <span class="kw">AS</span> (</span>
-<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span></span>
-<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span></span>
-<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>  EXCEPT</span>
-<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>    (page_title),</span>
-<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Clean the page_title field</span></span>
-<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span> <span class="cf">WHEN</span> page_title <span class="kw">IS</span> <span class="kw">NULL</span> <span class="cf">THEN</span> <span class="kw">REPLACE</span>(</span>
-<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>      REGEXP_EXTRACT(</span>
-<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>        REGEXP_REPLACE(<span class="fu">trim</span>(page_location), r <span class="st">&#39;/$&#39;</span>, <span class="st">&#39;&#39;</span>),</span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>        r <span class="st">&#39;[^/]+$&#39;</span></span>
-<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>      r <span class="st">&#39;[+-]&#39;</span>,</span>
-<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>      <span class="st">&#39; &#39;</span></span>
-<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>    ) </span>
-<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract last part of URL as a fallback page title, replacing special characters</span></span>
-<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">trim</span>(page_location) <span class="op">=</span> <span class="fu">trim</span>(<span class="st">&quot;https://shop.googlemerchandisestore.com/New/&quot;</span>) <span class="cf">THEN</span> <span class="st">&quot;New&quot;</span> <span class="cf">WHEN</span> <span class="fu">trim</span>(page_location) <span class="op">=</span> <span class="fu">trim</span>(</span>
-<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;https://shop.googlemerchandisestore.com/details/New/New/GGL1720_Google Notabag - Blue&quot;</span></span>
-<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">THEN</span> <span class="st">&quot;Google Notabag - Blue&quot;</span> <span class="cf">WHEN</span> <span class="fu">trim</span>(page_location) <span class="op">=</span> <span class="fu">trim</span>(</span>
-<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;https://shop.googlemerchandisestore.com/details/New/New/GGL1720_Google&quot;</span></span>
-<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">THEN</span> <span class="st">&quot;GGL1720_Google&quot;</span> <span class="cf">WHEN</span> <span class="fu">trim</span>(page_location) <span class="op">=</span> <span class="fu">trim</span>(</span>
-<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;https://shop.googlemerchandisestore.com/google+redesign/apparel/google+kirkland+campus+unisex+tee&quot;</span></span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">THEN</span> <span class="st">&quot;google+kirkland+campus+unisex+tee&quot;</span> <span class="cf">ELSE</span> page_title <span class="co">-- Keep the original page title if available</span></span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> page_title_cleaned</span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span></span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>    session_level</span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span></span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>  page_clean</span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2. User-Level Aggregation</span></span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query aggregates user-level data, such as lifetime value (LTV), country, and region.</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query extracts session-level information, including timestamps, user IDs, page views, and traffic sources. It also creates unique keys for session analysis and cleans page titles for better readability.</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">-- Define a CTE to extract session-level data from GA4 event logs</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> session_level <span class="kw">AS</span> (</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    event_date, <span class="co">-- The date of the event</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">extract</span>(</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>      <span class="dt">datetime</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>        timestamp_micros(event_timestamp)</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> event_timestamp, <span class="co">-- Convert event timestamp to a readable datetime format</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    user_pseudo_id,</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Create a unique join key for session-level analysis by combining user ID, session ID, timestamp, and event name</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">concat</span>(</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>      user_pseudo_id,</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>      (</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>          value<span class="ch">.</span>int_value</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>        <span class="kw">FROM</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>          unnest(event_params)</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>        <span class="kw">WHERE</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>          <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>      event_timestamp,</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>      event_name</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> join_key,</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Create a session key using user ID and session ID</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    <span class="fu">concat</span>(</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>      user_pseudo_id,</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>      (</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>          value<span class="ch">.</span>int_value</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>        <span class="kw">FROM</span></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>          unnest(event_params)</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>        <span class="kw">WHERE</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>          <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> session_key,</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>    event_name,</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract the page title from event parameters</span></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>    (</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>      <span class="kw">SELECT</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>        value<span class="ch">.</span>string_value</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>        unnest(event_params)</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>        <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;page_title&#39;</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> page_title,</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract the page URL from event parameters</span></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>    (</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>      <span class="kw">SELECT</span></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>        value<span class="ch">.</span>string_value</span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>        unnest(event_params)</span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>        <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;page_location&#39;</span></span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> page_location,</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract engagement time (in milliseconds) from event parameters</span></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>    (</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>      <span class="kw">SELECT</span></span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>        value<span class="ch">.</span>int_value</span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>        unnest(event_params)</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>        <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;engagement_time_msec&#39;</span></span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> event_engagement_time_msec,</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract traffic source information (where the user came from)</span></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>    traffic_source<span class="ch">.</span>name <span class="kw">AS</span> traffic_source_name,</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>    traffic_source<span class="ch">.</span>medium <span class="kw">AS</span> traffic_source_medium,</span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>    traffic_source<span class="ch">.</span>source <span class="kw">AS</span> traffic_source_source,</span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>    device<span class="ch">.</span>category <span class="kw">AS</span> device</span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- change this to your google analytics 4 export location in bigquery</span></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>    <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span></span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>    _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="co">-- Change the dates to your parameters in Power Query M code</span></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>    <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>),</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a><span class="co">-- Define another CTE to clean and standardize page titles</span></span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>page_clean <span class="kw">AS</span> (</span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span></span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>  EXCEPT</span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>    (page_title),</span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Clean the page_title field</span></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span> <span class="cf">WHEN</span> page_title <span class="kw">IS</span> <span class="kw">NULL</span> <span class="cf">THEN</span> <span class="kw">REPLACE</span>(</span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>      REGEXP_EXTRACT(</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>        REGEXP_REPLACE(<span class="fu">trim</span>(page_location), r <span class="st">&#39;/$&#39;</span>, <span class="st">&#39;&#39;</span>),</span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>        r <span class="st">&#39;[^/]+$&#39;</span></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>      r <span class="st">&#39;[+-]&#39;</span>,</span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>      <span class="st">&#39; &#39;</span></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Extract last part of URL as a fallback page title, replacing special characters</span></span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">trim</span>(page_location) <span class="op">=</span> <span class="fu">trim</span>(<span class="st">&quot;https://shop.googlemerchandisestore.com/New/&quot;</span>) <span class="cf">THEN</span> <span class="st">&quot;New&quot;</span> <span class="cf">WHEN</span> <span class="fu">trim</span>(page_location) <span class="op">=</span> <span class="fu">trim</span>(</span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;https://shop.googlemerchandisestore.com/details/New/New/GGL1720_Google Notabag - Blue&quot;</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">THEN</span> <span class="st">&quot;Google Notabag - Blue&quot;</span> <span class="cf">WHEN</span> <span class="fu">trim</span>(page_location) <span class="op">=</span> <span class="fu">trim</span>(</span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;https://shop.googlemerchandisestore.com/details/New/New/GGL1720_Google&quot;</span></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">THEN</span> <span class="st">&quot;GGL1720_Google&quot;</span> <span class="cf">WHEN</span> <span class="fu">trim</span>(page_location) <span class="op">=</span> <span class="fu">trim</span>(</span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;https://shop.googlemerchandisestore.com/google+redesign/apparel/google+kirkland+campus+unisex+tee&quot;</span></span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">THEN</span> <span class="st">&quot;google+kirkland+campus+unisex+tee&quot;</span> <span class="cf">ELSE</span> page_title <span class="co">-- Keep the original page title if available</span></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> page_title_cleaned</span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span></span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>    session_level</span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span></span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>  page_clean</span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a><span class="co">-- Aggregate user-level data</span></span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>  user_pseudo_id, <span class="co">-- Anonymous user identifier</span></span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Calculate the average lifetime value (LTV) revenue per user</span></span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">AVG</span>(user_ltv<span class="ch">.</span>revenue) <span class="kw">AS</span> ltv,</span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Retrieve the latest currency associated with the user&#39;s LTV</span></span>
-<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(user_ltv<span class="ch">.</span>currency) <span class="kw">AS</span> ltv_currency,</span>
-<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Get the most recent country associated with the user</span></span>
-<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(geo<span class="ch">.</span>country) <span class="kw">AS</span> country,</span>
-<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Get the most recent region (state/province) associated with the user</span></span>
-<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(geo<span class="ch">.</span>region) <span class="kw">AS</span> region</span>
-<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
-<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Replace this with your GA4 BigQuery export table</span></span>
-<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>  <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
-<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span></span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Filter for events within the specified date range</span></span>
-<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>  _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="co">-- Change the dates to your parameters in Power Query M code</span></span>
-<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span></span>
-<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span></span>
-<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>  user_pseudo_id; <span class="co">-- Aggregate data at the user level</span></span>
-<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3. Item Details</span></span>
-<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query retrieves item-related information.</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2. User-Level Aggregation</span></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query aggregates user-level data, such as lifetime value (LTV), country, and region.</span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a><span class="co">-- Aggregate user-level data</span></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>  user_pseudo_id, <span class="co">-- Anonymous user identifier</span></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Calculate the average lifetime value (LTV) revenue per user</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>  <span class="fu">AVG</span>(user_ltv<span class="ch">.</span>revenue) <span class="kw">AS</span> ltv,</span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Retrieve the latest currency associated with the user&#39;s LTV</span></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(user_ltv<span class="ch">.</span>currency) <span class="kw">AS</span> ltv_currency,</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Get the most recent country associated with the user</span></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(geo<span class="ch">.</span>country) <span class="kw">AS</span> country,</span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Get the most recent region (state/province) associated with the user</span></span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(geo<span class="ch">.</span>region) <span class="kw">AS</span> region</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Replace this with your GA4 BigQuery export table</span></span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>  <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Filter for events within the specified date range</span></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>  _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="co">-- Change the dates to your parameters in Power Query M code</span></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span></span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span></span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a>  user_pseudo_id; <span class="co">-- Aggregate data at the user level</span></span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
-<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a><span class="co">-- Extract and aggregate item details</span></span>
-<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>  i<span class="ch">.</span>item_id, <span class="co">-- Unique identifier for the item</span></span>
-<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a>  i<span class="ch">.</span>item_name, <span class="co">-- Name of the item</span></span>
-<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Retrieve the most recent category associated with the item</span></span>
-<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(i<span class="ch">.</span>item_category) <span class="kw">AS</span> category</span>
-<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
-<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Replace this with your GA4 BigQuery export table</span></span>
-<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a>  <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span>,</span>
-<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Expand the nested &#39;items&#39; array to extract individual item details</span></span>
-<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>  UNNEST(items) <span class="kw">AS</span> i</span>
-<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span></span>
-<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>  i<span class="ch">.</span>item_id, <span class="co">-- Group by item ID to aggregate item-level data</span></span>
-<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>  i<span class="ch">.</span>item_name; <span class="co">-- Group by item name to maintain unique item records</span></span>
-<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4. Purchase - event level</span></span>
-<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query extracts details of each purchase event.</span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3. Item Details</span></span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query retrieves item-related information.</span>
+<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a><span class="co">-- Extract and aggregate item details</span></span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a>  i<span class="ch">.</span>item_id, <span class="co">-- Unique identifier for the item</span></span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a>  i<span class="ch">.</span>item_name, <span class="co">-- Name of the item</span></span>
+<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Retrieve the most recent category associated with the item</span></span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(i<span class="ch">.</span>item_category) <span class="kw">AS</span> category</span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Replace this with your GA4 BigQuery export table</span></span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a>  <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span>,</span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Expand the nested &#39;items&#39; array to extract individual item details</span></span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>  UNNEST(items) <span class="kw">AS</span> i</span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span></span>
+<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a>  i<span class="ch">.</span>item_id, <span class="co">-- Group by item ID to aggregate item-level data</span></span>
+<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a>  i<span class="ch">.</span>item_name; <span class="co">-- Group by item name to maintain unique item records</span></span>
+<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
-<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a><span class="co">--purchase</span></span>
-<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">concat</span>(user_pseudo_id,</span>
-<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a>                (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
-<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">FROM</span> unnest(event_params)</span>
-<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span>),event_timestamp, event_name) <span class="kw">AS</span> join_key,</span>
-<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>transaction_id,</span>
-<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>total_item_quantity,</span>
-<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>purchase_revenue_in_usd,</span>
-<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>purchase_revenue,</span>
-<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>refund_value_in_usd,</span>
-<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>refund_value,</span>
-<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>shipping_value_in_usd,</span>
-<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>shipping_value,</span>
-<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>tax_value_in_usd,</span>
-<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>tax_value,</span>
-<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>unique_items</span>
-<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="co">-- change this to your google analytics 4 export location in bigquery</span></span>
-<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a> <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
-<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> event_name <span class="op">=</span> <span class="st">&#39;purchase&#39;</span></span>
-<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span> <span class="co">-- Change the dates to your parameters in Power Query M code</span></span>
-<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5. Purchase Details - Item level</span></span>
-<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query extracts detailed information about purchased items, including item IDs, names, prices, and quantities.</span>
+<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4. Purchase - event level</span></span>
+<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query extracts details of each purchase event.</span>
+<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a><span class="co">--purchase</span></span>
+<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">concat</span>(user_pseudo_id,</span>
+<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a>                (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
+<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">FROM</span> unnest(event_params)</span>
+<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span>),event_timestamp, event_name) <span class="kw">AS</span> join_key,</span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>transaction_id,</span>
+<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>total_item_quantity,</span>
+<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>purchase_revenue_in_usd,</span>
+<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>purchase_revenue,</span>
+<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>refund_value_in_usd,</span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>refund_value,</span>
+<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>shipping_value_in_usd,</span>
+<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>shipping_value,</span>
+<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>tax_value_in_usd,</span>
+<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>tax_value,</span>
+<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a>       ecommerce<span class="ch">.</span>unique_items</span>
+<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="co">-- change this to your google analytics 4 export location in bigquery</span></span>
+<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a> <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
+<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> event_name <span class="op">=</span> <span class="st">&#39;purchase&#39;</span></span>
+<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span> <span class="co">-- Change the dates to your parameters in Power Query M code</span></span>
+<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
-<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a><span class="co">--purchase details</span></span>
-<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> event_timestamp,</span>
-<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a>       <span class="fu">concat</span>(user_pseudo_id,</span>
-<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a>                (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
-<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">FROM</span> unnest(event_params)</span>
-<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span>),event_timestamp, event_name) <span class="kw">AS</span> join_key,</span>
-<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_id,</span>
-<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_name,</span>
-<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_brand,</span>
-<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_variant,</span>
-<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_category,</span>
-<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>coupon,</span>
-<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>affiliation,</span>
-<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>location_id,</span>
-<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_list_id,</span>
-<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_list_name,</span>
-<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_list_index,</span>
-<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>promotion_id,</span>
-<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>promotion_name,</span>
-<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>creative_name,</span>
-<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>creative_slot,</span>
-<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>price_in_usd,</span>
-<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>price,</span>
-<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>quantity,</span>
-<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_revenue_in_usd,</span>
-<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_revenue,</span>
-<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_refund_in_usd</span>
-<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="co">-- change this to your google analytics 4 export location in bigquery</span></span>
-<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a> <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
-<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> unnest(items) i</span>
-<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> event_name <span class="op">=</span> <span class="st">&#39;purchase&#39;</span></span>
-<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span> <span class="co">-- Change the dates to your parameters in Power Query M code</span></span>
-<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a><span class="fu">### 6. Session Analysis</span></span>
-<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query calculates session metrics like session duration, engagement, and unique page views.</span>
+<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5. Purchase Details - Item level</span></span>
+<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query extracts detailed information about purchased items, including item IDs, names, prices, and quantities.</span>
+<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a><span class="co">--purchase details</span></span>
+<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> event_timestamp,</span>
+<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a>       <span class="fu">concat</span>(user_pseudo_id,</span>
+<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a>                (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
+<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">FROM</span> unnest(event_params)</span>
+<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span>),event_timestamp, event_name) <span class="kw">AS</span> join_key,</span>
+<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_id,</span>
+<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_name,</span>
+<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_brand,</span>
+<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_variant,</span>
+<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_category,</span>
+<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>coupon,</span>
+<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>affiliation,</span>
+<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>location_id,</span>
+<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_list_id,</span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_list_name,</span>
+<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_list_index,</span>
+<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>promotion_id,</span>
+<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>promotion_name,</span>
+<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>creative_name,</span>
+<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>creative_slot,</span>
+<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>price_in_usd,</span>
+<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>price,</span>
+<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>quantity,</span>
+<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_revenue_in_usd,</span>
+<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_revenue,</span>
+<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a>       i<span class="ch">.</span>item_refund_in_usd</span>
+<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="co">-- change this to your google analytics 4 export location in bigquery</span></span>
+<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a> <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
+<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> unnest(items) i</span>
+<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> event_name <span class="op">=</span> <span class="st">&#39;purchase&#39;</span></span>
+<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span> <span class="co">-- Change the dates to your parameters in Power Query M code</span></span>
+<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
-<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a><span class="co">--sessions</span></span>
-<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> prep <span class="kw">AS</span></span>
-<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">SELECT</span> event_timestamp,</span>
-<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>          <span class="fu">concat</span>(user_pseudo_id,</span>
-<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>                   (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
-<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">FROM</span> unnest(event_params)</span>
-<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span>)) <span class="kw">AS</span> session_key,</span>
-<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>          <span class="fu">coalesce</span>(<span class="fu">cast</span>(</span>
-<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>                          (<span class="kw">SELECT</span> value<span class="ch">.</span>string_value</span>
-<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>                           <span class="kw">FROM</span> unnest(event_params)</span>
-<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>                           <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;session_engaged&#39;</span>) <span class="kw">AS</span> <span class="dt">int</span>), <span class="dv">0</span>) <span class="kw">AS</span> session_engaged,</span>
-<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>          <span class="fu">count</span>(<span class="kw">DISTINCT</span></span>
-<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>                  (<span class="kw">SELECT</span> value<span class="ch">.</span>string_value</span>
-<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>                   <span class="kw">FROM</span> unnest(event_params)</span>
-<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>                   <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;page_location&#39;</span>)) over(PARTITION <span class="kw">BY</span> user_pseudo_id,</span>
-<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>                                                        (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
-<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>                                                         <span class="kw">FROM</span> unnest(event_params)</span>
-<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>                                                         <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span>)) <span class="kw">AS</span> unique_page_views,</span>
-<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>     (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
-<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span> unnest(event_params)</span>
-<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;engagement_time_msec&#39;</span>) <span class="kw">AS</span> session_engagement_time_msec</span>
-<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>   <span class="kw">FROM</span> <span class="co">-- change this to your google analytics 4 export location in bigquery</span></span>
-<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a> <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
-<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>   <span class="kw">WHERE</span> _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span>)</span>
-<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">max</span>(event_timestamp) <span class="op">-</span> <span class="fu">min</span>(event_timestamp) <span class="kw">AS</span> session_duration_msec,</span>
-<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a>       session_key,</span>
-<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>       <span class="fu">max</span>(session_engaged) <span class="kw">AS</span> session_engaged,</span>
-<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>       <span class="fu">max</span>(unique_page_views) <span class="kw">AS</span> upv,</span>
-<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a>       <span class="fu">sum</span>(session_engagement_time_msec) <span class="kw">AS</span> session_engagement_time_msec</span>
-<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> prep</span>
-<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> session_key</span>
-<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a><span class="fu">## Semantic Model</span></span>
-<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a>The extracted and transformed data can be used to build a semantic model in Power BI, enabling interactive analysis and reporting.</span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a><span class="fu">### 6. Session Analysis</span></span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>This query calculates session metrics like session duration, engagement, and unique page views.</span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a><span class="in">``` sql</span></span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a><span class="co">--sessions</span></span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> prep <span class="kw">AS</span></span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">SELECT</span> event_timestamp,</span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>          <span class="fu">concat</span>(user_pseudo_id,</span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>                   (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">FROM</span> unnest(event_params)</span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span>)) <span class="kw">AS</span> session_key,</span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>          <span class="fu">coalesce</span>(<span class="fu">cast</span>(</span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>                          (<span class="kw">SELECT</span> value<span class="ch">.</span>string_value</span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>                           <span class="kw">FROM</span> unnest(event_params)</span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>                           <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;session_engaged&#39;</span>) <span class="kw">AS</span> <span class="dt">int</span>), <span class="dv">0</span>) <span class="kw">AS</span> session_engaged,</span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>          <span class="fu">count</span>(<span class="kw">DISTINCT</span></span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>                  (<span class="kw">SELECT</span> value<span class="ch">.</span>string_value</span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>                   <span class="kw">FROM</span> unnest(event_params)</span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>                   <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;page_location&#39;</span>)) over(PARTITION <span class="kw">BY</span> user_pseudo_id,</span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>                                                        (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>                                                         <span class="kw">FROM</span> unnest(event_params)</span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>                                                         <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;ga_session_id&#39;</span>)) <span class="kw">AS</span> unique_page_views,</span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>     (<span class="kw">SELECT</span> value<span class="ch">.</span>int_value</span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span> unnest(event_params)</span>
+<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span> <span class="kw">KEY</span> <span class="op">=</span> <span class="st">&#39;engagement_time_msec&#39;</span>) <span class="kw">AS</span> session_engagement_time_msec</span>
+<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a>   <span class="kw">FROM</span> <span class="co">-- change this to your google analytics 4 export location in bigquery</span></span>
+<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a> <span class="st">`bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`</span></span>
+<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>   <span class="kw">WHERE</span> _table_suffix <span class="kw">BETWEEN</span> <span class="st">&#39;20201231&#39;</span> <span class="kw">AND</span> <span class="st">&#39;20210131&#39;</span>)</span>
+<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">max</span>(event_timestamp) <span class="op">-</span> <span class="fu">min</span>(event_timestamp) <span class="kw">AS</span> session_duration_msec,</span>
+<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a>       session_key,</span>
+<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a>       <span class="fu">max</span>(session_engaged) <span class="kw">AS</span> session_engaged,</span>
+<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a>       <span class="fu">max</span>(unique_page_views) <span class="kw">AS</span> upv,</span>
+<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a>       <span class="fu">sum</span>(session_engagement_time_msec) <span class="kw">AS</span> session_engagement_time_msec</span>
+<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> prep</span>
+<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> session_key</span>
+<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a><span class="al">![Semantic Model](thumbnail.jpg)</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
+<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a><span class="fu">## Semantic Model</span></span>
+<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a>The extracted and transformed data can be used to build a semantic model in Power BI, enabling interactive analysis and reporting.</span>
+<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a><span class="al">![Semantic Model](thumbnail.jpg)</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
